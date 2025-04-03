@@ -188,8 +188,6 @@ export class BudgetTableComponent implements OnInit {
   formatNumberInput(event: any) {
     let value = event.target.value.replace(/\D/g, '');
     event.target.value = value !== '' ? parseInt(value) : '';
-
-    console.log(this.categories);
   }
 
   onRightClick(event: MouseEvent, category: BudgetCategory, month: string) {

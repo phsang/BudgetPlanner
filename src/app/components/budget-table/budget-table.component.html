@@ -27,10 +27,9 @@
           <td class="p-2 border border-gray-300">
             <div class="d-flex gap-8">
               <button class="btn btn-remove" (click)="deleteCategory('income', category.id)">🗑</button>
-              <input
-                type="text"
-                value="{{ category.name }}"
-                (input)="changeCategoryName($event, 'income', category.id)">
+              <blockquote
+                contenteditable="true"
+                (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
@@ -53,10 +52,9 @@
           <td class="p-2 border border-gray-300">
             <div class="d-flex gap-8">
               <button class="btn btn-remove" (click)="deleteCategory('expense', category.id)">🗑</button>
-              <input
-                type="text"
-                value="{{ category.name }}"
-                (input)="changeCategoryName($event, 'expense', category.id)">
+              <blockquote
+                contenteditable="true"
+                (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">

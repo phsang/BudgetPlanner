@@ -44,7 +44,7 @@ input {
 }
 
 input:focus {
-  border-color: #3f51b5;
+  border-color: #3f51b5 !important;
   outline: none;
 }
 
@@ -69,6 +69,13 @@ blockquote {
   border-radius: 2px;
   height: 24px;
   margin: 0;
+  padding: 1px 2px;
+  width: 92px;
+}
+
+blockquote:focus {
+  border-color: #3f51b5 !important;
+  outline: none;
 }
 
 .range_container {

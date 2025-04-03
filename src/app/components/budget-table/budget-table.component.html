@@ -1,9 +1,23 @@
+
+
 <div class="tbl_container">
+  <div class="range_container">
+    <sh-date-picker
+      [shRange]="true"
+      [shFormat]="'DD/MM/YYYY'"
+      [shId]="'sh-range'"
+      [shName]="'range'"
+      [shMin]="minRange"
+      [shMax]="maxRange"
+      [shPlaceHolder]="'Date range'"
+      (ngModelChange)="changeDate($event)"></sh-date-picker>
+  </div>
+
   <table class="w-full border-collapse border border-gray-300">
     <thead class="bg-gray-200">
       <tr>
         <th class="p-2 border border-gray-300">Category</th>
-        <th *ngFor="let month of months" class="p-2 border border-gray-300">{{ month }} 2024</th>
+        <th *ngFor="let month of months_gen" class="p-2 border border-gray-300">{{ month }} 2024</th>
       </tr>
     </thead>
     <tbody>
@@ -11,10 +25,15 @@
       <ng-container *ngFor="let category of categories.income; let i = index">
         <tr class="bg-green-50">
           <td class="p-2 border border-gray-300">
-            <button class="btn btn-remove" (click)="deleteCategory('income', category.id)">🗑</button>
-            {{ category.name }}
+            <div class="d-flex gap-8">
+              <button class="btn btn-remove" (click)="deleteCategory('income', category.id)">🗑</button>
+              <input
+                type="text"
+                value="{{ category.name }}"
+                (input)="changeCategoryName($event, 'income', category.id)">
+            </div>
           </td>
-          <td *ngFor="let month of months; let j = index" class="border border-gray-300">
+          <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
             <input
               type="text"
               data-type="income"
@@ -32,10 +51,15 @@
       <ng-container *ngFor="let category of categories.expense; let i = index">
         <tr class="bg-red-50">
           <td class="p-2 border border-gray-300">
-            <button class="btn btn-remove" (click)="deleteCategory('expense', category.id)">🗑</button>
-            {{ category.name }}
+            <div class="d-flex gap-8">
+              <button class="btn btn-remove" (click)="deleteCategory('expense', category.id)">🗑</button>
+              <input
+                type="text"
+                value="{{ category.name }}"
+                (input)="changeCategoryName($event, 'expense', category.id)">
+            </div>
           </td>
-          <td *ngFor="let month of months; let j = index" class="border border-gray-300">
+          <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
             <input
               type="text"
               data-type="expense"
@@ -62,15 +86,15 @@
     <tfoot class="bg-gray-100 font-bold">
       <tr>
         <td class="p-2 border border-gray-300">Total Income</td>
-        <td *ngFor="let month of months" class="p-2 border border-gray-300 text-right">{{ calculateTotal('income', month) }}</td>
+        <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('income', month) }}</td>
       </tr>
       <tr>
         <td class="p-2 border border-gray-300">Total Expense</td>
-        <td *ngFor="let month of months" class="p-2 border border-gray-300 text-right">{{ calculateTotal('expense', month) }}</td>
+        <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('expense', month) }}</td>
       </tr>
       <tr class="bg-yellow-100">
         <td class="p-2 border border-gray-300">Profit / Loss</td>
-        <td *ngFor="let month of months" class="p-2 border border-gray-300 text-right">{{ calculateProfitLoss(month) }}</td>
+        <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateProfitLoss(month) }}</td>
       </tr>
     </tfoot>
   </table>

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../../services/budget.service';
 import { BudgetCategory } from '../../models/budget.model';
 import { v4 as uuidv4 } from 'uuid';
+import { ShDatePickerModule } from 'sahu';
 
 @Component({
   selector: 'app-budget-table',
@@ -12,11 +13,13 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrls: ['./budget-table.component.scss'],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    ShDatePickerModule
   ]
 })
 export class BudgetTableComponent implements OnInit {
   months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  months_gen = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   categories: { income: BudgetCategory[]; expense: BudgetCategory[] } = { income: [], expense: [] };
   contextMenu = {
     show: false,
@@ -25,6 +28,8 @@ export class BudgetTableComponent implements OnInit {
     category: null as BudgetCategory | null,
     month: '' as string
   };
+  minRange = new Date(2024, 0, 1);
+  maxRange = new Date(2024, 11, 31);
 
   constructor(
     private readonly budgetService: BudgetService,
@@ -211,6 +216,23 @@ export class BudgetTableComponent implements OnInit {
 
   toggleExpand(category: BudgetCategory) {
     category.expanded = !category.expanded;
+  }
+
+  changeDate(date: any) {
+    const startMonth = date[0].getMonth();
+    const endMonth = date[1].getMonth();
+    this.months_gen = [];
+
+    for (let i = startMonth; i <= endMonth; i++) {
+      this.months_gen.push(this.months[i]);
+    }
+  }
+
+  changeCategoryName(event: any, type: 'income' | 'expense', id: string) {
+    const category = this.categories[type].find(c => c.id === id);
+    if (category) {
+      category.name = event.target.value;
+    }
   }
 
 }

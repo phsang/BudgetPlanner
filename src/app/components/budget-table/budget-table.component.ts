@@ -74,7 +74,7 @@ export class BudgetTableComponent implements OnInit {
       case 'Tab':
         event.preventDefault();
         // nếu nhấn 'Tab' ở ô cuối cùng sẽ tự động sinh thêm dòng mới và forcus về ô đầu tiếp theo trên dòng mới
-        if (index === inputs.length - 1) {
+        if ((index % this.months_gen.length) === this.months_gen.length - 1) {
           this.addCategory(inputs[index].getAttribute('data-type'));
         }
         this.focusNextCell(inputs, index + 1);

@@ -39,7 +39,6 @@
             <input
               type="text"
               data-type="expense"
-              class="w-full p-1 text-right border-none focus:outline-none"
               [(ngModel)]="category.values[month]"
               (keydown)="handleKeydown($event, i, j)"
               (input)="formatNumberInput($event)"

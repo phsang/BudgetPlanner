@@ -150,9 +150,17 @@ export class BudgetTableComponent {
 
   // Tính tổng lợi nhuận cho một tháng
   calculateProfitLoss(month: string): number {
-    const totalIncome = this.calculateTotal('income', month);
-    const totalExpense = this.calculateTotal('expense', month);
-    return totalIncome - totalExpense;
+    let cumulativeProfitLoss = 0;
+    const monthIndex = this.months.indexOf(month);
+
+    for (let i = 0; i <= monthIndex; i++) {
+      const currentMonth = this.months[i];
+      const totalIncome = this.calculateTotal('income', currentMonth) || 0;
+      const totalExpense = this.calculateTotal('expense', currentMonth) || 0;
+      cumulativeProfitLoss += (totalIncome - totalExpense);
+    }
+
+    return cumulativeProfitLoss;
   }
 
   formatNumberInput(event: any) {

@@ -89,11 +89,11 @@ export class BudgetTableComponent implements OnInit {
         break;
       case 'ArrowDown':
         event.preventDefault();
-        this.focusNextCell(inputs, index + this.months.length);
+        this.focusNextCell(inputs, index + this.months_gen.length);
         break;
       case 'ArrowUp':
         event.preventDefault();
-        this.focusNextCell(inputs, index - this.months.length);
+        this.focusNextCell(inputs, index - this.months_gen.length);
         break;
     }
   }

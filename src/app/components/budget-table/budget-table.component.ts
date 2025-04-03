@@ -26,8 +26,10 @@ export class BudgetTableComponent {
     month: '' as string
   };
 
-  constructor(private budgetService: BudgetService, private el: ElementRef) {
-    // Lấy danh mục từ service
+  constructor(
+    private readonly budgetService: BudgetService,
+    private readonly el: ElementRef
+  ) {
     this.budgetService.categories$.subscribe((categories: BudgetCategory[]) => {
       this.categories = {
         income: categories.filter((c) => c.type === 'income'),
@@ -36,7 +38,6 @@ export class BudgetTableComponent {
     });
   }
 
-  // Xử lý nhập bàn phím
   handleKeydown(event: KeyboardEvent, row: number, col: number) {
     const inputs = this.el.nativeElement.querySelectorAll('input');
     const index = Array.from(inputs).findIndex((input) => input === event.target);

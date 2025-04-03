@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../../services/budget.service';
@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
     FormsModule
   ]
 })
-export class BudgetTableComponent {
+export class BudgetTableComponent implements OnInit {
   months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   categories: { income: BudgetCategory[]; expense: BudgetCategory[] } = { income: [], expense: [] };
   contextMenu = {
@@ -36,6 +36,11 @@ export class BudgetTableComponent {
         expense: categories.filter((c) => c.type === 'expense')
       };
     });
+  }
+
+  ngOnInit(): void {
+    this.addCategory('income');
+    this.addCategory('expense');
   }
 
   handleKeydown(event: KeyboardEvent, row: number, col: number) {
@@ -165,8 +170,8 @@ export class BudgetTableComponent {
   }
 
   formatNumberInput(event: any) {
-    let value = event.target.value.replace(/\D/g, ''); // Xóa tất cả ký tự không phải số
-    event.target.value = parseInt(value); // Gán lại giá trị đã lọc
+    let value = event.target.value.replace(/\D/g, '');
+    event.target.value = value !== '' ? parseInt(value) : '';
   }
 
   onRightClick(event: MouseEvent, category: BudgetCategory, month: string) {

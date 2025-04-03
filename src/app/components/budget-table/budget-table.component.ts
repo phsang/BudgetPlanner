@@ -46,6 +46,17 @@ export class BudgetTableComponent implements OnInit {
   ngOnInit(): void {
     this.addCategory('income');
     this.addCategory('expense');
+
+    this.categories['income'].forEach((category: any) => {
+      this.months_gen.forEach((month: string) => {
+        category.values[month] = 0;
+      });
+    });
+    this.categories['expense'].forEach((category: any) => {
+      this.months_gen.forEach((month: string) => {
+        category.values[month] = 0;
+      });
+    });
   }
 
   handleKeydown(event: KeyboardEvent, row: number, col: number) {
@@ -177,6 +188,8 @@ export class BudgetTableComponent implements OnInit {
   formatNumberInput(event: any) {
     let value = event.target.value.replace(/\D/g, '');
     event.target.value = value !== '' ? parseInt(value) : '';
+
+    console.log(this.categories);
   }
 
   onRightClick(event: MouseEvent, category: BudgetCategory, month: string) {

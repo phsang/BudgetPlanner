@@ -1,0 +1,202 @@
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { BudgetService } from '../../services/budget.service';
+import { BudgetCategory } from '../../models/budget.model';
+import { v4 as uuidv4 } from 'uuid';
+
+@Component({
+  selector: 'app-budget-table',
+  standalone: true,
+  templateUrl: './budget-table.component.html',
+  styleUrls: ['./budget-table.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule
+  ]
+})
+export class BudgetTableComponent {
+  months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  categories: { income: BudgetCategory[]; expense: BudgetCategory[] } = { income: [], expense: [] };
+  contextMenu = {
+    show: false,
+    x: 0,
+    y: 0,
+    category: null as BudgetCategory | null,
+    month: '' as string
+  };
+
+  constructor(private budgetService: BudgetService, private el: ElementRef) {
+    // Lấy danh mục từ service
+    this.budgetService.categories$.subscribe((categories: BudgetCategory[]) => {
+      this.categories = {
+        income: categories.filter((c) => c.type === 'income'),
+        expense: categories.filter((c) => c.type === 'expense')
+      };
+    });
+  }
+
+  // Xử lý nhập bàn phím
+  handleKeydown(event: KeyboardEvent, row: number, col: number) {
+    const inputs = this.el.nativeElement.querySelectorAll('input');
+    const index = Array.from(inputs).findIndex((input) => input === event.target);
+
+    switch (event.key) {
+      case 'Enter':
+        event.preventDefault();
+        if (row === this.categories.income.length - 1) {
+          this.addCategory('income'); // Thêm dòng mới nếu đang ở cuối
+        }
+        this.focusNextCell(inputs, index + this.months.length);
+        break;
+      case 'Tab':
+        event.preventDefault();
+        // nếu nhấn 'Tab' ở ô cuối cùng sẽ tự động sinh thêm dòng mới và forcus về ô đầu tiếp theo trên dòng mới
+        if (index === inputs.length - 1) {
+          this.addCategory(inputs[index].getAttribute('data-type'));
+        }
+        this.focusNextCell(inputs, index + 1);
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        this.focusNextCell(inputs, index + 1);
+        break;
+      case 'ArrowLeft':
+        event.preventDefault();
+        this.focusNextCell(inputs, index - 1);
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        this.focusNextCell(inputs, index + this.months.length);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        this.focusNextCell(inputs, index - this.months.length);
+        break;
+    }
+  }
+
+  // Chuyển focus đến ô tiếp theo
+  private focusNextCell(inputs: NodeListOf<HTMLInputElement>, nextIndex: number) {
+    if (nextIndex >= 0 && nextIndex < inputs.length) {
+      inputs[nextIndex].focus();
+    }
+  }
+
+  // Thêm danh mục thu nhập hoặc chi phí mới
+  addCategory(type: 'income' | 'expense', parentId?: string) {
+    const newCategory: BudgetCategory = {
+      id: uuidv4(), // Tạo ID duy nhất bằng UUID
+      name: `New ${type}`,
+      type,
+      values: {},
+      children: [],
+      expanded: false
+    };
+
+    if (parentId) {
+      // Nếu có parentId, thêm vào danh mục con
+      const parentCategory = this.categories[type].find(c => c.id === parentId);
+      if (parentCategory) {
+        if (!parentCategory.children) {
+          parentCategory.children = [];
+        }
+        parentCategory.children.push(newCategory);
+      }
+    } else {
+      // Nếu không có parentId, thêm vào danh mục cha
+      this.categories[type].push(newCategory);
+    }
+
+    this.categories = { ...this.categories }; // Cập nhật UI
+  }
+
+  addSubCategory(type: 'income' | 'expense') {
+    const parent = this.categories.income[0]; // Tạm thời chọn danh mục cha đầu tiên
+    if (!parent) return;
+    const newSubCategory: BudgetCategory = {
+      id: uuidv4(),
+      name: 'New Sub Category',
+      values: {},
+      children: [],
+      expanded: false,
+      type: type
+    };
+    parent.children?.push(newSubCategory);
+  }
+
+  deleteCategory(type: 'income' | 'expense', categoryId: string) {
+    const filterCategories = (categories: BudgetCategory[]) => {
+      return categories.filter(category => category.id !== categoryId);
+    };
+
+    this.categories[type] = filterCategories(this.categories[type]);
+    this.categories = { ...this.categories }; // Cập nhật UI
+  }
+
+  // Tính tổng thu nhập cho một tháng
+  calculateTotal(type: 'income' | 'expense', month: string): number {
+    let total = 0;
+    const categories = this.categories[type];
+
+    categories.forEach(category => {
+      if (category.values[month]) {
+        total += Number(category.values[month]) || 0;
+      }
+    });
+
+    return total;
+  }
+
+  // Tính tổng lợi nhuận cho một tháng
+  calculateProfitLoss(month: string): number {
+    const totalIncome = this.calculateTotal('income', month);
+    const totalExpense = this.calculateTotal('expense', month);
+    return totalIncome - totalExpense;
+  }
+
+  formatNumberInput(event: any) {
+    let value = event.target.value.replace(/\D/g, ''); // Xóa tất cả ký tự không phải số
+    event.target.value = parseInt(value); // Gán lại giá trị đã lọc
+  }
+
+  onRightClick(event: MouseEvent, category: BudgetCategory, month: string) {
+    event.preventDefault(); // Ngăn chặn menu mặc định của trình duyệt
+
+    // Lưu thông tin của ô được chọn
+    this.contextMenu = {
+      show: true,
+      x: event.clientX,
+      y: event.clientY,
+      category,
+      month
+    };
+  }
+
+  applyToAll() {
+    if (!this.contextMenu.category || !this.contextMenu.month) return;
+
+    const valueToApply = this.contextMenu.category.values[this.contextMenu.month] || 0;
+
+    // Sao chép giá trị vào tất cả các tháng
+    this.months.forEach(month => {
+      // Gán giá trị ngay cả khi trước đó chưa có giá trị nào
+      this.contextMenu.category!.values[month] = valueToApply;
+    });
+
+    // Cập nhật lại giao diện (force change detection)
+    this.categories = { ...this.categories };
+
+    // Ẩn menu sau khi chọn
+    this.contextMenu.show = false;
+  }
+
+  deleteSubCategory(parent: BudgetCategory, id: string) {
+    parent.children = parent.children?.filter(sub => sub.id !== id) || [];
+  }
+
+  toggleExpand(category: BudgetCategory) {
+    category.expanded = !category.expanded;
+  }
+
+}

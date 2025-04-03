@@ -1,0 +1,87 @@
+<div class="tbl_container">
+  <table class="w-full border-collapse border border-gray-300">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="p-2 border border-gray-300">Category</th>
+        <th *ngFor="let month of months" class="p-2 border border-gray-300">{{ month }} 2024</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Hiển thị danh mục thu nhập -->
+      <ng-container *ngFor="let category of categories.income; let i = index">
+        <tr class="bg-green-50">
+          <td class="p-2 border border-gray-300">
+            <button class="btn btn-remove" (click)="deleteCategory('income', category.id)">🗑</button>
+            {{ category.name }}
+          </td>
+          <td *ngFor="let month of months; let j = index" class="border border-gray-300">
+            <input
+              type="text"
+              data-type="income"
+              class="w-full p-1 text-right border-none focus:outline-none"
+              [(ngModel)]="category.values[month]"
+              (keydown)="handleKeydown($event, i, j)"
+              (input)="formatNumberInput($event)"
+              (contextmenu)="onRightClick($event, category, month)"
+              [autofocus]="i === 0 && j === 0" />
+          </td>
+        </tr>
+      </ng-container>
+
+      <!-- Hiển thị danh mục chi phí -->
+      <ng-container *ngFor="let category of categories.expense; let i = index">
+        <tr class="bg-red-50">
+          <td class="p-2 border border-gray-300">
+            <button class="btn btn-remove" (click)="deleteCategory('expense', category.id)">🗑</button>
+            {{ category.name }}
+          </td>
+          <td *ngFor="let month of months; let j = index" class="border border-gray-300">
+            <input
+              type="text"
+              data-type="expense"
+              class="w-full p-1 text-right border-none focus:outline-none"
+              [(ngModel)]="category.values[month]"
+              (keydown)="handleKeydown($event, i, j)"
+              (input)="formatNumberInput($event)"
+              (contextmenu)="onRightClick($event, category, month)"
+              [autofocus]="i === 0 && j === 0" />
+          </td>
+        </tr>
+      </ng-container>
+
+      <!-- Thêm danh mục -->
+      <tr>
+        <td [attr.colspan]="months.length + 2">
+          <div class="category-action">
+            <button class="btn btn-primary" (click)="addCategory('income')">+ Add New Income Category</button>
+            <button class="btn btn-primary" (click)="addCategory('expense')">+ Add New Expense Category</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+
+    <tfoot class="bg-gray-100 font-bold">
+      <tr>
+        <td class="p-2 border border-gray-300">Total Income</td>
+        <td *ngFor="let month of months" class="p-2 border border-gray-300 text-right">{{ calculateTotal('income', month) }}</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-300">Total Expense</td>
+        <td *ngFor="let month of months" class="p-2 border border-gray-300 text-right">{{ calculateTotal('expense', month) }}</td>
+      </tr>
+      <tr class="bg-yellow-100">
+        <td class="p-2 border border-gray-300">Profit / Loss</td>
+        <td *ngFor="let month of months" class="p-2 border border-gray-300 text-right">{{ calculateProfitLoss(month) }}</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<!-- Context Menu Popup -->
+<div class="overlay" *ngIf="contextMenu.show" (click)="contextMenu.show = false"></div>
+<div *ngIf="contextMenu.show"
+  [style.left.px]="contextMenu.x"
+  [style.top.px]="contextMenu.y"
+  class="context-menu bg-white border shadow-lg rounded-md p-2">
+  <button class="bg-blue-500 text-white px-3 py-1 rounded w-full" (click)="applyToAll()">Apply to all</button>
+</div>

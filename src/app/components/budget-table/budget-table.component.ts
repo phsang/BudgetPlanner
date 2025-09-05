@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, NgZone, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BudgetService } from '../../services/budget.service';
-import { BudgetCategory } from '../../models/budget.model';
-import { v4 as uuidv4 } from 'uuid';
 import { take } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
+import { BudgetCategory } from '../../models/budget.model';
+import { BudgetService } from '../../services/budget.service';
 
 @Component({
   selector: 'app-budget-table',
@@ -62,6 +62,7 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     const firstInput = this.el.nativeElement.querySelector('input');
     if (firstInput) {
       firstInput.focus();
+      firstInput.select();
     }
   }
 
@@ -80,6 +81,9 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
 
     switch (event.key) {
       case 'Enter':
+        event.preventDefault();
+        this.focusNextCell(inputs, index + this.months_gen.length);
+        break;
       case 'Tab':
         event.preventDefault();
         // nếu nhấn 'Tab' ở ô cuối cùng sẽ tự động sinh thêm dòng mới và forcus về ô đầu tiếp theo trên dòng mới
@@ -117,6 +121,7 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
   private focusNextCell(inputs: NodeListOf<HTMLInputElement>, nextIndex: number) {
     if (nextIndex >= 0 && nextIndex < inputs.length) {
       inputs[nextIndex].focus();
+      inputs[nextIndex].select();
     }
   }
 

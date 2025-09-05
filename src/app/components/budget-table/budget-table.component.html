@@ -1,16 +1,17 @@
-
-
 <div class="tbl_container">
-  <div class="range_container">
-    <sh-date-picker
-      [shRange]="true"
-      [shFormat]="'MM/YYYY'"
-      [shId]="'sh-range'"
-      [shName]="'range'"
-      [shMin]="minRange"
-      [shMax]="maxRange"
-      [shPlaceHolder]="'Date range'"
-      (ngModelChange)="changeDate($event)"></sh-date-picker>
+  <div class="">
+    <div class="d-flex justify-between w-100 mb-15">
+      <select name="range" id="sh-range" (change)="changeRange($event)">
+        <option value="0" selected>All time</option>
+        <option value="1">Start Period</option>
+        <option value="2">End Period</option>
+      </select>
+      <div class="d-flex gap-10">
+        <button class="btn btn-primary" (click)="addCategory('income')">+ Add New Income Category</button>
+        <button class="btn btn-primary" (click)="addCategory('expense')">+ Add New Expense Category</button>
+      </div>
+    </div>
+
   </div>
 
   <table class="w-full border-collapse border border-gray-300">
@@ -27,21 +28,11 @@
           <td class="p-2 border border-gray-300">
             <div class="d-flex gap-8">
               <button class="btn btn-remove" (click)="deleteCategory('income', category.id)">🗑</button>
-              <blockquote
-                contenteditable="true"
-                (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
+              <blockquote contenteditable="true" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-            <input
-              type="text"
-              data-type="income"
-              class="w-full p-1 text-right border-none focus:outline-none"
-              [(ngModel)]="category.values[month]"
-              (keydown)="handleKeydown($event, i, j)"
-              (input)="formatNumberInput($event)"
-              (contextmenu)="onRightClick($event, category, month)"
-              [autofocus]="i === 0 && j === 0" />
+            <input type="text" data-type="income" class="w-full p-1 text-right border-none focus:outline-none" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
           </td>
         </tr>
       </ng-container>
@@ -52,33 +43,14 @@
           <td class="p-2 border border-gray-300">
             <div class="d-flex gap-8">
               <button class="btn btn-remove" (click)="deleteCategory('expense', category.id)">🗑</button>
-              <blockquote
-                contenteditable="true"
-                (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
+              <blockquote contenteditable="true" (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-            <input
-              type="text"
-              data-type="expense"
-              [(ngModel)]="category.values[month]"
-              (keydown)="handleKeydown($event, i, j)"
-              (input)="formatNumberInput($event)"
-              (contextmenu)="onRightClick($event, category, month)"
-              [autofocus]="i === 0 && j === 0" />
+            <input type="text" data-type="expense" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
           </td>
         </tr>
       </ng-container>
-
-      <!-- Thêm danh mục -->
-      <tr>
-        <td [attr.colspan]="months.length + 2">
-          <div class="category-action">
-            <!-- <button class="btn btn-primary" (click)="addCategory('income')">+ Add New Income Category</button>
-            <button class="btn btn-primary" (click)="addCategory('expense')">+ Add New Expense Category</button> -->
-          </div>
-        </td>
-      </tr>
     </tbody>
 
     <tfoot class="bg-gray-100 font-bold">
@@ -100,9 +72,6 @@
 
 <!-- Context Menu Popup -->
 <div class="overlay" *ngIf="contextMenu.show" (click)="contextMenu.show = false"></div>
-<div *ngIf="contextMenu.show"
-  [style.left.px]="contextMenu.x"
-  [style.top.px]="contextMenu.y"
-  class="context-menu bg-white border shadow-lg rounded-md p-2">
+<div *ngIf="contextMenu.show" [style.left.px]="contextMenu.x" [style.top.px]="contextMenu.y" class="context-menu bg-white border shadow-lg rounded-md p-2">
   <button class="bg-blue-500 text-white px-3 py-1 rounded w-full" (click)="applyToAll()">Apply to all</button>
 </div>

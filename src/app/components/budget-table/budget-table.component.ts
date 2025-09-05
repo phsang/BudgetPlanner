@@ -1,10 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../../services/budget.service';
 import { BudgetCategory } from '../../models/budget.model';
 import { v4 as uuidv4 } from 'uuid';
-import { ShDatePickerModule } from 'sahu';
 
 @Component({
   selector: 'app-budget-table',
@@ -13,11 +12,10 @@ import { ShDatePickerModule } from 'sahu';
   styleUrls: ['./budget-table.component.scss'],
   imports: [
     CommonModule,
-    FormsModule,
-    ShDatePickerModule
+    FormsModule
   ]
 })
-export class BudgetTableComponent implements OnInit {
+export class BudgetTableComponent implements OnInit, AfterViewInit {
   months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   months_gen = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   categories: { income: BudgetCategory[]; expense: BudgetCategory[] } = { income: [], expense: [] };
@@ -28,8 +26,6 @@ export class BudgetTableComponent implements OnInit {
     category: null as BudgetCategory | null,
     month: '' as string
   };
-  minRange = new Date(2024, 0, 1);
-  maxRange = new Date(2024, 11, 31);
 
   constructor(
     private readonly budgetService: BudgetService,
@@ -57,6 +53,14 @@ export class BudgetTableComponent implements OnInit {
         category.values[month] = 0;
       });
     });
+  }
+
+  ngAfterViewInit() {
+    // focus vào ô đầu tiên khi bảng được tải
+    const firstInput = this.el.nativeElement.querySelector('input');
+    if (firstInput) {
+      firstInput.focus();
+    }
   }
 
   handleKeydown(event: KeyboardEvent, row: number, col: number) {
@@ -111,7 +115,10 @@ export class BudgetTableComponent implements OnInit {
       id: uuidv4(), // Tạo ID duy nhất bằng UUID
       name: `New ${type}`,
       type,
-      values: {},
+      values: {
+        Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0,
+        Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0
+      },
       children: [],
       expanded: false
     };
@@ -129,6 +136,8 @@ export class BudgetTableComponent implements OnInit {
       // Nếu không có parentId, thêm vào danh mục cha
       this.categories[type].push(newCategory);
     }
+
+    console.log(this.categories);
 
     this.categories = { ...this.categories }; // Cập nhật UI
   }
@@ -211,7 +220,7 @@ export class BudgetTableComponent implements OnInit {
     // Sao chép giá trị vào tất cả các tháng
     this.months.forEach(month => {
       // Gán giá trị ngay cả khi trước đó chưa có giá trị nào
-      this.contextMenu.category!.values[month] = valueToApply;
+      this.contextMenu.category!.values[month] = parseInt(valueToApply.toString());
     });
 
     // Cập nhật lại giao diện (force change detection)
@@ -229,9 +238,28 @@ export class BudgetTableComponent implements OnInit {
     category.expanded = !category.expanded;
   }
 
-  changeDate(date: any) {
-    const startMonth = date[0].getMonth();
-    const endMonth = date[1].getMonth();
+  changeRange(event: any) {
+    const value = (event.target as HTMLSelectElement).value;
+    let startMonth = 0;
+    let endMonth = 0;
+
+    switch (value) {
+      case '0': {
+        startMonth = 0;
+        endMonth = 11;
+        break;
+      }
+      case '1': {
+        startMonth = 0;
+        endMonth = 5;
+        break;
+      }
+      case '2': {
+        startMonth = 6;
+        endMonth = 11;
+        break;
+      }
+    }
     this.months_gen = [];
 
     for (let i = startMonth; i <= endMonth; i++) {

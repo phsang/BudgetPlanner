@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BudgetService } from '../../services/budget.service';
 import { BudgetCategory } from '../../models/budget.model';
 import { v4 as uuidv4 } from 'uuid';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-budget-table',
@@ -29,7 +30,8 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
 
   constructor(
     private readonly budgetService: BudgetService,
-    private readonly el: ElementRef
+    private readonly el: ElementRef,
+    private readonly ngZone: NgZone
   ) {
     this.budgetService.categories$.subscribe((categories: BudgetCategory[]) => {
       this.categories = {
@@ -66,22 +68,31 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
   handleKeydown(event: KeyboardEvent, row: number, col: number) {
     const inputs = this.el.nativeElement.querySelectorAll('input');
     const index = Array.from(inputs).findIndex((input) => input === event.target);
+    let totalMonthsIncome = 0;
+    let totalMonthsExpense = 0;
+
+    this.categories.income.forEach((month) => {
+      totalMonthsIncome += month.values ? Object.keys(month.values).length : 0;
+    });
+    this.categories.expense.forEach((month) => {
+      totalMonthsExpense += month.values ? Object.keys(month.values).length : 0;
+    });
 
     switch (event.key) {
       case 'Enter':
-        event.preventDefault();
-        if (row === this.categories.income.length - 1) {
-          this.addCategory('income'); // Thêm dòng mới nếu đang ở cuối
-        }
-        this.focusNextCell(inputs, index + this.months.length);
-        break;
       case 'Tab':
         event.preventDefault();
         // nếu nhấn 'Tab' ở ô cuối cùng sẽ tự động sinh thêm dòng mới và forcus về ô đầu tiếp theo trên dòng mới
-        if ((index % this.months_gen.length) === this.months_gen.length - 1) {
-          this.addCategory(inputs[index].getAttribute('data-type'));
+        if (totalMonthsIncome === (index + 1)) {
+          this.addCategory('income');
         }
-        this.focusNextCell(inputs, index + 1);
+        if (totalMonthsExpense === (index + 1 - totalMonthsIncome)) {
+          this.addCategory('expense');
+        }
+        this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+          const inputs = this.el.nativeElement.querySelectorAll('input');
+          this.focusNextCell(inputs, index + 1);
+        });
         break;
       case 'ArrowRight':
         event.preventDefault();
@@ -136,8 +147,6 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
       // Nếu không có parentId, thêm vào danh mục cha
       this.categories[type].push(newCategory);
     }
-
-    console.log(this.categories);
 
     this.categories = { ...this.categories }; // Cập nhật UI
   }

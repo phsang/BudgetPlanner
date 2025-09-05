@@ -7,8 +7,8 @@
         <option value="2">End Period</option>
       </select>
       <div class="d-flex gap-10">
-        <button class="btn btn-primary" (click)="addCategory('income')">+ Add New Income Category</button>
-        <button class="btn btn-primary" (click)="addCategory('expense')">+ Add New Expense Category</button>
+        <button class="btn btn-primary" (click)="addCategory('income')">+ New Income</button>
+        <button class="btn btn-primary" (click)="addCategory('expense')">+ New Expense</button>
       </div>
     </div>
 
@@ -26,8 +26,8 @@
       <ng-container *ngFor="let category of categories.income; let i = index">
         <tr class="bg-green-50">
           <td class="p-2 border border-gray-300">
-            <div class="d-flex gap-8">
-              <button class="btn btn-remove" (click)="deleteCategory('income', category.id)">🗑</button>
+            <div class="d-flex gap-8 justify-end">
+              <button class="btn" (click)="deleteCategory('income', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
               <blockquote contenteditable="true" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
             </div>
           </td>
@@ -41,8 +41,8 @@
       <ng-container *ngFor="let category of categories.expense; let i = index">
         <tr class="bg-red-50">
           <td class="p-2 border border-gray-300">
-            <div class="d-flex gap-8">
-              <button class="btn btn-remove" (click)="deleteCategory('expense', category.id)">🗑</button>
+            <div class="d-flex gap-8 justify-end">
+              <button class="btn" (click)="deleteCategory('expense', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
               <blockquote contenteditable="true" (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
             </div>
           </td>

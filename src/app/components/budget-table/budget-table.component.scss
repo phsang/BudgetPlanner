@@ -9,3 +9,15 @@
 .justify-between {
   justify-content: space-between !important;
 }
+
+.justify-end {
+  justify-content: flex-end !important;
+}
+
+.btn-disabled {
+  background-color: #e0e0e0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #a0a0a0 !important;
+  pointer-events: none;
+}

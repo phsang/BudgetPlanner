@@ -17,6 +17,7 @@
       <tr>
         <th class="p-2 border border-gray-300">Category</th>
         <th *ngFor="let month of months_gen" class="p-2 border border-gray-300">{{ month }} 2024</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -25,12 +26,14 @@
         <tr class="bg-green-50">
           <td class="p-2 border border-gray-300">
             <div class="d-flex gap-8 justify-end">
-              <button class="btn" (click)="deleteCategory('income', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
               <blockquote contenteditable="true" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
             <input type="text" data-type="income" class="w-full p-1 text-right border-none focus:outline-none" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+          </td>
+          <td>
+            <button class="btn" (click)="deleteCategory('income', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
           </td>
         </tr>
       </ng-container>
@@ -40,12 +43,14 @@
         <tr class="bg-red-50">
           <td class="p-2 border border-gray-300">
             <div class="d-flex gap-8 justify-end">
-              <button class="btn" (click)="deleteCategory('expense', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
               <blockquote contenteditable="true" (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
             <input type="text" data-type="expense" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+          </td>
+          <td>
+            <button class="btn" (click)="deleteCategory('expense', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
           </td>
         </tr>
       </ng-container>
@@ -55,14 +60,17 @@
       <tr>
         <td class="p-2 border border-gray-300">Total Income</td>
         <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('income', month) }}</td>
+        <td></td>
       </tr>
       <tr>
         <td class="p-2 border border-gray-300">Total Expense</td>
         <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('expense', month) }}</td>
+        <td></td>
       </tr>
       <tr class="bg-yellow-100">
         <td class="p-2 border border-gray-300">Profit / Loss</td>
         <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateProfitLoss(month) }}</td>
+        <td></td>
       </tr>
     </tfoot>
   </table>

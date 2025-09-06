@@ -293,4 +293,14 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     }
   }
 
+  saveCategoryName(event: KeyboardEvent, type: 'income' | 'expense', id: string) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const category = this.categories[type].find(c => c.id === id);
+      if (category) {
+        category.changeName = false;
+      }
+    }
+  }
+
 }

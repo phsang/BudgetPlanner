@@ -5,8 +5,12 @@
         <sh-select [shId]="'sh-range'" [shName]="'range'" [shPlaceHolder]="'Period'" [shData]="[{value: '0', label: 'All time'}, {value: '1', label: 'Start Period'}, {value: '2', label: 'End Period'}]" (shChange)="changeRange($event)" [shAllowClear]="false"></sh-select>
       </div>
       <div class="d-flex gap-10">
-        <button class="btn btn-primary" (click)="addCategory('income')">+ New Income</button>
-        <button class="btn btn-primary" (click)="addCategory('expense')">+ New Expense</button>
+        <button class="btn btn-primary" (click)="addCategory('income')">
+          <sh-icon [shIcon]="'plus'"></sh-icon> New Income
+        </button>
+        <button class="btn btn-primary" (click)="addCategory('expense')">
+          <sh-icon [shIcon]="'plus'"></sh-icon> New Expense
+        </button>
       </div>
     </div>
 
@@ -30,7 +34,7 @@
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-            <input type="text" data-type="income" class="w-full p-1 text-right border-none focus:outline-none" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+            <input type="text" data-type="income" class="text-right" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
           </td>
           <td>
             <button class="btn" (click)="deleteCategory('income', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
@@ -47,7 +51,7 @@
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-            <input type="text" data-type="expense" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+            <input type="text" data-type="expense" class="text-right" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
           </td>
           <td>
             <button class="btn" (click)="deleteCategory('expense', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>

@@ -5,7 +5,7 @@ import { take } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { BudgetCategory } from '../../models/budget.model';
 import { BudgetService } from '../../services/budget.service';
-import { ShSelectModule } from 'sahu';
+import { ShSelectModule, ShIconModule } from 'sahu';
 
 @Component({
   selector: 'app-budget-table',
@@ -15,7 +15,8 @@ import { ShSelectModule } from 'sahu';
   imports: [
     CommonModule,
     FormsModule,
-    ShSelectModule
+    ShSelectModule,
+    ShIconModule
   ]
 })
 export class BudgetTableComponent implements OnInit, AfterViewInit {

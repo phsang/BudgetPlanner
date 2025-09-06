@@ -61,11 +61,10 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // focus vào ô đầu tiên khi bảng được tải
-    const firstInput = this.el.nativeElement.querySelector('input');
-    if (firstInput) {
-      firstInput.focus();
-      firstInput.select();
+    const inputs: NodeListOf<HTMLInputElement> = this.el.nativeElement.querySelectorAll('input');
+    if (inputs.length > 1) {
+      inputs[1].focus();
+      inputs[1].select();
     }
   }
 

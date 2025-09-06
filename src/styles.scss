@@ -30,6 +30,15 @@ body {
   border-color: rgb(21, 104, 248) !important;
 }
 
+.btn-edit {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: rgb(165, 134, 90) !important;
+  font-size: 16px;
+  padding: 0 !important;
+}
+
 input {
   border: 1px solid #ccc !important;
   border-radius: 2px;
@@ -59,12 +68,17 @@ input:focus {
 }
 
 blockquote {
-  border: 1px solid #ccc;
   border-radius: 2px;
   height: 24px;
   margin: 0;
+  min-width: 90px;
   padding: 1px 2px;
-  width: 92px;
+  width: fit-content;
+}
+
+blockquote.changing_name {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
 }
 
 blockquote:focus {

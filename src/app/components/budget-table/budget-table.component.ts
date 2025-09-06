@@ -275,4 +275,22 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     }
   }
 
+  toggleChangeName(category: BudgetCategory, el: HTMLElement) {
+    category.changeName = !category.changeName;
+    if (category.changeName) {
+      // chờ Angular render xong rồi mới focus
+      setTimeout(() => {
+        el.focus();
+
+        // Đặt caret ở cuối text
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+      });
+    }
+  }
+
 }

@@ -29,8 +29,11 @@
       <ng-container *ngFor="let category of categories.income; let i = index">
         <tr class="bg-green-50">
           <td class="p-2 border border-gray-300">
-            <div class="d-flex gap-8 justify-end">
-              <blockquote contenteditable="true" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
+            <div class="d-flex gap-12 justify-between">
+              <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
+              <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
+                <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
+              </button>
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
@@ -46,8 +49,11 @@
       <ng-container *ngFor="let category of categories.expense; let i = index">
         <tr class="bg-red-50">
           <td class="p-2 border border-gray-300">
-            <div class="d-flex gap-8 justify-end">
-              <blockquote contenteditable="true" (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
+            <div class="w-100 d-flex gap-8 justify-between">
+              <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
+              <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
+                <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
+              </button>
             </div>
           </td>
           <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">

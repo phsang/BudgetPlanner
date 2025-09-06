@@ -253,24 +253,12 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
 
   changeRange(value: string) {
     let startMonth = 0;
-    let endMonth = 0;
+    let endMonth = 11;
 
-    switch (value) {
-      case '0': {
-        startMonth = 0;
-        endMonth = 11;
-        break;
-      }
-      case '1': {
-        startMonth = 0;
-        endMonth = 5;
-        break;
-      }
-      case '2': {
-        startMonth = 6;
-        endMonth = 11;
-        break;
-      }
+    if (value === '1') {
+      endMonth = 5;
+    } else if (value === '2') {
+      startMonth = 6;
     }
     this.months_gen = [];
 

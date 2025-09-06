@@ -1,89 +1,88 @@
-<div class="tbl_container">
-  <div class="">
-    <div class="d-flex justify-between w-100 mb-15">
-      <div class="switch_period">
-        <sh-select [shId]="'sh-range'" [shName]="'range'" [shPlaceHolder]="'Period'" [shData]="[{value: '0', label: 'All time'}, {value: '1', label: 'Start Period'}, {value: '2', label: 'End Period'}]" (shChange)="changeRange($event)" [shAllowClear]="false"></sh-select>
-      </div>
-      <div class="d-flex gap-10">
-        <button class="btn btn-primary" (click)="addCategory('income')">
-          <sh-icon [shIcon]="'plus'"></sh-icon> New Income
-        </button>
-        <button class="btn btn-primary" (click)="addCategory('expense')">
-          <sh-icon [shIcon]="'plus'"></sh-icon> New Expense
-        </button>
-      </div>
+<div class="page_wrapper">
+  <div class="d-flex justify-between w-100 mb-15">
+    <div class="switch_period">
+      <sh-select [shId]="'sh-range'" [shName]="'range'" [shPlaceHolder]="'Period'" [shData]="[{value: '0', label: 'All time'}, {value: '1', label: 'Start Period'}, {value: '2', label: 'End Period'}]" (shChange)="changeRange($event)" [shAllowClear]="false"></sh-select>
     </div>
-
+    <div class="d-flex gap-10">
+      <button class="btn btn-primary" (click)="addCategory('income')">
+        <sh-icon [shIcon]="'plus'"></sh-icon> New Income
+      </button>
+      <button class="btn btn-primary" (click)="addCategory('expense')">
+        <sh-icon [shIcon]="'plus'"></sh-icon> New Expense
+      </button>
+    </div>
   </div>
 
-  <table class="w-full border-collapse border border-gray-300">
-    <thead class="bg-gray-200">
-      <tr>
-        <th class="p-2 border border-gray-300">Category</th>
-        <th *ngFor="let month of months_gen" class="p-2 border border-gray-300">{{ month }} 2024</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Hiển thị danh mục thu nhập -->
-      <ng-container *ngFor="let category of categories.income; let i = index">
-        <tr class="bg-green-50">
-          <td class="p-2 border border-gray-300">
-            <div class="d-flex gap-12 justify-between">
-              <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
-              <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
-                <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
-              </button>
-            </div>
-          </td>
-          <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-            <input type="text" data-type="income" class="text-right" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
-          </td>
-          <td>
-            <button class="btn" (click)="deleteCategory('income', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
-          </td>
+  <div class="tbl_container">
+    <table class="w-full border-collapse border border-gray-300">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="p-2 border border-gray-300">Category</th>
+          <th *ngFor="let month of months_gen" class="p-2 border border-gray-300">{{ month }} 2024</th>
+          <th>Action</th>
         </tr>
-      </ng-container>
+      </thead>
+      <tbody>
+        <!-- Hiển thị danh mục thu nhập -->
+        <ng-container *ngFor="let category of categories.income; let i = index">
+          <tr class="bg-green-50">
+            <td class="p-2 border border-gray-300">
+              <div class="d-flex gap-12 justify-between">
+                <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
+                <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
+                  <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
+                </button>
+              </div>
+            </td>
+            <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
+              <input type="text" data-type="income" class="text-right" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+            </td>
+            <td>
+              <button class="btn" (click)="deleteCategory('income', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
+            </td>
+          </tr>
+        </ng-container>
 
-      <!-- Hiển thị danh mục chi phí -->
-      <ng-container *ngFor="let category of categories.expense; let i = index">
-        <tr class="bg-red-50">
-          <td class="p-2 border border-gray-300">
-            <div class="w-100 d-flex gap-8 justify-between">
-              <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
-              <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
-                <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
-              </button>
-            </div>
-          </td>
-          <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-            <input type="text" data-type="expense" class="text-right" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
-          </td>
-          <td>
-            <button class="btn" (click)="deleteCategory('expense', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
-          </td>
+        <!-- Hiển thị danh mục chi phí -->
+        <ng-container *ngFor="let category of categories.expense; let i = index">
+          <tr class="bg-red-50">
+            <td class="p-2 border border-gray-300">
+              <div class="w-100 d-flex gap-8 justify-between">
+                <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
+                <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
+                  <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
+                </button>
+              </div>
+            </td>
+            <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
+              <input type="text" data-type="expense" class="text-right" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+            </td>
+            <td>
+              <button class="btn" (click)="deleteCategory('expense', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+
+      <tfoot class="bg-gray-100 font-bold">
+        <tr>
+          <td class="p-2 border border-gray-300">Total Income</td>
+          <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('income', month) }}</td>
+          <td></td>
         </tr>
-      </ng-container>
-    </tbody>
-
-    <tfoot class="bg-gray-100 font-bold">
-      <tr>
-        <td class="p-2 border border-gray-300">Total Income</td>
-        <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('income', month) }}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td class="p-2 border border-gray-300">Total Expense</td>
-        <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('expense', month) }}</td>
-        <td></td>
-      </tr>
-      <tr class="bg-yellow-100">
-        <td class="p-2 border border-gray-300">Profit / Loss</td>
-        <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateProfitLoss(month) }}</td>
-        <td></td>
-      </tr>
-    </tfoot>
-  </table>
+        <tr>
+          <td class="p-2 border border-gray-300">Total Expense</td>
+          <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('expense', month) }}</td>
+          <td></td>
+        </tr>
+        <tr class="bg-yellow-100">
+          <td class="p-2 border border-gray-300">Profit / Loss</td>
+          <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateProfitLoss(month) }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
 </div>
 
 <!-- Context Menu Popup -->

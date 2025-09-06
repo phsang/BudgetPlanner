@@ -95,15 +95,19 @@ blockquote:focus {
   }
 }
 
-.tbl_container {
+.page_wrapper {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: auto;
   max-width: calc(100% - 32px);
   min-height: 100vh;
-  overflow-x: auto;
   padding: 20px 16px;
   width: 1200px;
+}
+
+.tbl_container {
+  overflow-x: auto;
+  overflow-y: hidden;
 
   table {
     border-bottom: 1px solid #dfdfdf;

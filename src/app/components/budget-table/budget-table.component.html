@@ -28,7 +28,7 @@
           <tr class="bg-green-50">
             <td class="p-2 border border-gray-300">
               <div class="d-flex gap-12 justify-between">
-                <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'income', category.id)" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
+                <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'income', category.id)" (input)="changeCategoryName($event, 'income', category.id)" [textContent]="category.name"></blockquote>
                 <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
                   <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
                 </button>
@@ -48,7 +48,7 @@
           <tr class="bg-red-50">
             <td class="p-2 border border-gray-300">
               <div class="w-100 d-flex gap-8 justify-between">
-                <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'expense', category.id)" (input)="changeCategoryName($event, 'expense', category.id)">{{ category.name }}</blockquote>
+                <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'expense', category.id)" (input)="changeCategoryName($event, 'expense', category.id)" [textContent]="category.name"></blockquote>
                 <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
                   <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
                 </button>

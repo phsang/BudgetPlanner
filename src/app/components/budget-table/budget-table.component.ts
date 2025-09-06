@@ -126,10 +126,13 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
 
   // Thêm danh mục thu nhập hoặc chi phí mới
   addCategory(type: 'income' | 'expense', parentId?: string) {
+    const index = this.categories[type].length;
+
     const newCategory: BudgetCategory = {
       id: uuidv4(), // Tạo ID duy nhất bằng UUID
-      name: `New ${type}`,
+      name: `New ${type} ${index + 1}`,
       type,
+      changeName: false,
       values: {
         Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0,
         Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0

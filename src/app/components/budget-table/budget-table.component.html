@@ -1,11 +1,9 @@
 <div class="tbl_container">
   <div class="">
     <div class="d-flex justify-between w-100 mb-15">
-      <select name="range" id="sh-range" (change)="changeRange($event)">
-        <option value="0" selected>All time</option>
-        <option value="1">Start Period</option>
-        <option value="2">End Period</option>
-      </select>
+      <div class="switch_period">
+        <sh-select [shId]="'sh-range'" [shName]="'range'" [shPlaceHolder]="'Period'" [shData]="[{value: '0', label: 'All time'}, {value: '1', label: 'Start Period'}, {value: '2', label: 'End Period'}]" (shChange)="changeRange($event)" [shAllowClear]="false"></sh-select>
+      </div>
       <div class="d-flex gap-10">
         <button class="btn btn-primary" (click)="addCategory('income')">+ New Income</button>
         <button class="btn btn-primary" (click)="addCategory('expense')">+ New Expense</button>

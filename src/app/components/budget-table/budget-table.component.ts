@@ -5,6 +5,7 @@ import { take } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { BudgetCategory } from '../../models/budget.model';
 import { BudgetService } from '../../services/budget.service';
+import { ShSelectModule } from 'sahu';
 
 @Component({
   selector: 'app-budget-table',
@@ -13,7 +14,8 @@ import { BudgetService } from '../../services/budget.service';
   styleUrls: ['./budget-table.component.scss'],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    ShSelectModule
   ]
 })
 export class BudgetTableComponent implements OnInit, AfterViewInit {
@@ -80,10 +82,6 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     });
 
     switch (event.key) {
-      case 'Enter':
-        event.preventDefault();
-        this.focusNextCell(inputs, index + this.months_gen.length);
-        break;
       case 'Tab':
         event.preventDefault();
         // nếu nhấn 'Tab' ở ô cuối cùng sẽ tự động sinh thêm dòng mới và forcus về ô đầu tiếp theo trên dòng mới
@@ -106,6 +104,7 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
         event.preventDefault();
         this.focusNextCell(inputs, index - 1);
         break;
+      case 'Enter':
       case 'ArrowDown':
         event.preventDefault();
         this.focusNextCell(inputs, index + this.months_gen.length);
@@ -252,8 +251,7 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     category.expanded = !category.expanded;
   }
 
-  changeRange(event: any) {
-    const value = (event.target as HTMLSelectElement).value;
+  changeRange(value: string) {
     let startMonth = 0;
     let endMonth = 0;
 

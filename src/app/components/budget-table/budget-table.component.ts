@@ -86,10 +86,10 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
       case 'Tab':
         event.preventDefault();
         // nếu nhấn 'Tab' ở ô cuối cùng sẽ tự động sinh thêm dòng mới và forcus về ô đầu tiếp theo trên dòng mới
-        if (totalMonthsIncome === (index + 1)) {
+        if (totalMonthsIncome === index) {
           this.addCategory('income');
         }
-        if (totalMonthsExpense === (index + 1 - totalMonthsIncome)) {
+        if (totalMonthsExpense === (index - totalMonthsIncome)) {
           this.addCategory('expense');
         }
         this.ngZone.onStable.pipe(take(1)).subscribe(() => {

@@ -35,7 +35,7 @@
               </div>
             </td>
             <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-              <input type="text" data-type="income" class="text-right" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+              <input type="text" data-type="income" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
             </td>
             <td>
               <button class="btn" (click)="deleteCategory('income', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>
@@ -55,7 +55,7 @@
               </div>
             </td>
             <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-              <input type="text" data-type="expense" class="text-right" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+              <input type="text" data-type="expense" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
             </td>
             <td>
               <button class="btn" (click)="deleteCategory('expense', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">🗑</button>

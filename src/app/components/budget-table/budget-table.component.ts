@@ -68,7 +68,7 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     }
   }
 
-  handleKeydown(event: KeyboardEvent, row: number, col: number) {
+  handleKeydown(event: KeyboardEvent, type: 'income' | 'expense', category: BudgetCategory, row: number, col: number) {
     const inputs = this.el.nativeElement.querySelectorAll('input');
     const index = Array.from(inputs).findIndex((input) => input === event.target);
     let totalMonthsIncome = 0;
@@ -82,6 +82,36 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     });
 
     switch (event.key) {
+      case 'Enter':
+        event.preventDefault();
+        if (!category.parentId) {
+          category.expanded = true;
+          if (!category.children || category.children.length === 0) {
+            this.addCategory(type, category.id);
+          }
+          this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+            const inputs = this.el.nativeElement.querySelectorAll('input');
+            this.focusNextCell(inputs, index + this.months_gen.length);
+          });
+        } else {
+          const arrayOfChildren = category.parentId ? this.categories[type].find(c => c.id === category.parentId)?.children : [];
+          if (arrayOfChildren) {
+            const currentIndex = arrayOfChildren.findIndex(c => c.id === category.id);
+            if (currentIndex !== -1) {
+              arrayOfChildren[currentIndex].expanded = !arrayOfChildren[currentIndex].expanded;
+            }
+            // Nếu ô đang focus nằm ở cuối danh sách con thì thêm một danh mục con mới
+            if (currentIndex === arrayOfChildren.length - 1) {
+              this.addCategory(type, category.parentId);
+            }
+            // Focus vào ngay ô bên dưới
+            this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+              const inputs = this.el.nativeElement.querySelectorAll('input');
+              this.focusNextCell(inputs, index + this.months_gen.length);
+            });
+          }
+        }
+        break;
       case 'Tab':
         event.preventDefault();
         // nếu nhấn 'Tab' ở ô cuối cùng sẽ tự động sinh thêm dòng mới và forcus về ô đầu tiếp theo trên dòng mới
@@ -104,7 +134,6 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
         event.preventDefault();
         this.focusNextCell(inputs, index - 1);
         break;
-      case 'Enter':
       case 'ArrowDown':
         event.preventDefault();
         this.focusNextCell(inputs, index + this.months_gen.length);
@@ -135,6 +164,7 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
         Jan: 0, Feb: 0, Mar: 0, Apr: 0, May: 0, Jun: 0,
         Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0
       },
+      parentId: parentId,
       children: [],
       expanded: true
     };
@@ -152,8 +182,6 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
       // Nếu không có parentId, thêm vào danh mục cha
       this.categories[type].push(newCategory);
     }
-
-    console.log(this.categories);
 
     this.categories = { ...this.categories }; // Cập nhật UI
   }

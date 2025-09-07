@@ -103,7 +103,10 @@
           <tr class="bg-red-50">
             <td class="p-2 border border-gray-300">
               <div class="w-100 d-flex gap-8 justify-between">
-                <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'expense', category.id)" (input)="changeCategoryName($event, 'expense', category.id)" [textContent]="category.name"></blockquote>
+                <div class="d-flex">
+                  <span>_</span>
+                  <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'expense', category.id)" (input)="changeCategoryName($event, 'expense', category.id)" [textContent]="category.name"></blockquote>
+                </div>
                 <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
                   <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
                 </button>
@@ -132,7 +135,10 @@
             <tr *ngFor="let subCategory of category.children; let k = index" class="bg-red-100">
               <td class="p-2 border border-gray-300 pl-20">
                 <div class="d-flex gap-8 justify-between">
-                  <blockquote #editableBlockSub [attr.contenteditable]="subCategory.changeName" [ngClass]="subCategory.changeName ? 'changing_name' : ''" (keydown)="saveSubCategoryName($event, 'expense', category.id, subCategory.id)" (input)="changeCategoryName($event, 'expense', subCategory.id)" [textContent]="subCategory.name"></blockquote>
+                  <div class="d-flex">
+                    <span>__</span>
+                    <blockquote #editableBlockSub [attr.contenteditable]="subCategory.changeName" [ngClass]="subCategory.changeName ? 'changing_name' : ''" (keydown)="saveSubCategoryName($event, 'expense', category.id, subCategory.id)" (input)="changeCategoryName($event, 'expense', subCategory.id)" [textContent]="subCategory.name"></blockquote>
+                  </div>
                   <button class="btn btn-edit" (click)="toggleChangeName(subCategory, editableBlockSub)">
                     <sh-icon [shIcon]="subCategory.changeName ? 'save' : 'edit'"></sh-icon>
                   </button>

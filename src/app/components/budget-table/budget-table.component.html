@@ -159,15 +159,28 @@
         </ng-container>
       </tbody>
 
-      <tfoot class="bg-gray-100 font-bold">
+      <tfoot>
         <tr>
           <td class="font600">Total Expense</td>
           <td *ngFor="let month of months_gen" class="text-right">{{ calculateTotal('expense', month) }}</td>
           <td></td>
         </tr>
-        <tr class="bg-yellow-100">
+        <tr>
           <td class="font600">Profit / Loss</td>
           <td *ngFor="let month of months_gen" class="text-right">{{ calculateProfitLoss(month) }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="font600">Opening Balance</td>
+          <td *ngFor="let month of months_gen; let i = index" class="text-right">
+            <input type="text" [(ngModel)]="openingBalanceInitial" (input)="formatNumberInput($event)" (change)="openingBalanceInitial = +openingBalanceInitial" *ngIf="i === 0" />
+            <span *ngIf="i !== 0">{{ calculateOpeningBalance(month) }}</span>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="font600">Closing Balance</td>
+          <td *ngFor="let month of months_gen" class="text-right">{{ calculateClosingBalance(month) }}</td>
           <td></td>
         </tr>
       </tfoot>

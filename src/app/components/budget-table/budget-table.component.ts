@@ -30,6 +30,7 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     category: null as BudgetCategory | null,
     month: '' as string
   };
+  openingBalanceInitial = 0;
 
   constructor(
     private readonly budgetService: BudgetService,
@@ -113,19 +114,6 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
         }
         break;
       case 'Tab':
-        event.preventDefault();
-        // nếu nhấn 'Tab' ở ô cuối cùng sẽ tự động sinh thêm dòng mới và forcus về ô đầu tiếp theo trên dòng mới
-        if (totalMonthsIncome === index) {
-          this.addCategory('income');
-        }
-        if (totalMonthsExpense === (index - totalMonthsIncome)) {
-          this.addCategory('expense');
-        }
-        this.ngZone.onStable.pipe(take(1)).subscribe(() => {
-          const inputs = this.el.nativeElement.querySelectorAll('input');
-          this.focusNextCell(inputs, index + 1);
-        });
-        break;
       case 'ArrowRight':
         event.preventDefault();
         this.focusNextCell(inputs, index + 1);
@@ -353,6 +341,26 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
         }
       }
     }
+  }
+
+  calculateOpeningBalance(month: string): number {
+    let total = Number(this.openingBalanceInitial) || 0;
+    const monthIndex = this.months.indexOf(month);
+
+    for (let i = 0; i < monthIndex; i++) {
+      const income = Number(this.calculateTotal('income', this.months[i])) || 0;
+      const expense = Number(this.calculateTotal('expense', this.months[i])) || 0;
+      total += income - expense;
+    }
+
+    return total;
+  }
+
+  calculateClosingBalance(month: string): number {
+    const openingBalance = this.calculateOpeningBalance(month);
+    const income = Number(this.calculateTotal('income', month)) || 0;
+    const expense = Number(this.calculateTotal('expense', month)) || 0;
+    return openingBalance + income - expense;
   }
 
 }

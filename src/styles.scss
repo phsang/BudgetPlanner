@@ -21,6 +21,10 @@ body {
   display: flex;
 }
 
+.align-items-end {
+  align-items: flex-end !important;
+}
+
 .text-right {
   text-align: right !important;
 }

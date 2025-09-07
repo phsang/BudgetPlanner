@@ -18,8 +18,8 @@
         <!-- Hiển thị danh mục thu nhập -->
         <tr class="bg_lightgray">
           <td [attr.colspan]="months_gen.length + 2">
-            <div class="d-flex justify-between">
-              <span class="font500">Income</span>
+            <div class="d-flex justify-between align-items-end">
+              <span class="font600">Income</span>
               <button class="btn btn-primary" (click)="addCategory('income')">
                 <sh-icon [shIcon]="'plus'"></sh-icon> New Income
               </button>
@@ -83,16 +83,16 @@
           </ng-container>
         </ng-container>
         <tr>
-          <td class="p-2 border border-gray-300">Total Income</td>
-          <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('income', month) }}</td>
+          <td class="font600">Total Income</td>
+          <td *ngFor="let month of months_gen" class="text-right">{{ calculateTotal('income', month) }}</td>
           <td></td>
         </tr>
 
         <!-- Hiển thị danh mục chi phí -->
         <tr class="bg_lightgray">
           <td [attr.colspan]="months_gen.length + 2" class="bg-red-100">
-            <div class="d-flex justify-between">
-              <span class="font500">Expense</span>
+            <div class="d-flex justify-between align-items-end">
+              <span class="font600">Expense</span>
               <button class="btn btn-primary" (click)="addCategory('expense')">
                 <sh-icon [shIcon]="'plus'"></sh-icon> New Expense
               </button>
@@ -161,13 +161,13 @@
 
       <tfoot class="bg-gray-100 font-bold">
         <tr>
-          <td class="p-2 border border-gray-300">Total Expense</td>
-          <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('expense', month) }}</td>
+          <td class="font600">Total Expense</td>
+          <td *ngFor="let month of months_gen" class="text-right">{{ calculateTotal('expense', month) }}</td>
           <td></td>
         </tr>
         <tr class="bg-yellow-100">
-          <td class="p-2 border border-gray-300">Profit / Loss</td>
-          <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateProfitLoss(month) }}</td>
+          <td class="font600">Profit / Loss</td>
+          <td *ngFor="let month of months_gen" class="text-right">{{ calculateProfitLoss(month) }}</td>
           <td></td>
         </tr>
       </tfoot>

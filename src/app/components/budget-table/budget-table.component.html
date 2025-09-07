@@ -4,9 +4,6 @@
       <sh-select [shId]="'sh-range'" [shName]="'range'" [shPlaceHolder]="'All time'" [shData]="[{value: '0', label: 'All time'}, {value: '1', label: 'Start Period'}, {value: '2', label: 'End Period'}]" (shChange)="changeRange($event)" [shAllowClear]="false"></sh-select>
     </div>
     <div class="d-flex gap-10">
-      <button class="btn btn-primary" (click)="addCategory('income')">
-        <sh-icon [shIcon]="'plus'"></sh-icon> New Income
-      </button>
       <button class="btn btn-primary" (click)="addCategory('expense')">
         <sh-icon [shIcon]="'plus'"></sh-icon> New Expense
       </button>
@@ -24,8 +21,18 @@
       </thead>
       <tbody>
         <!-- Hiển thị danh mục thu nhập -->
+        <tr>
+          <td [attr.colspan]="months_gen.length + 2">
+            <div class="d-flex justify-between">
+              <span class="font500">Income</span>
+              <button class="btn btn-primary" (click)="addCategory('income')">
+                <sh-icon [shIcon]="'plus'"></sh-icon> New Income
+              </button>
+            </div>
+          </td>
+        </tr>
         <ng-container *ngFor="let category of categories.income; let i = index">
-          <tr class="bg-green-50">
+          <tr>
             <td class="p-2 border border-gray-300">
               <div class="d-flex gap-12 justify-between">
                 <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'income', category.id)" (input)="changeCategoryName($event, 'income', category.id)" [textContent]="category.name"></blockquote>
@@ -44,6 +51,11 @@
             </td>
           </tr>
         </ng-container>
+        <tr>
+          <td class="p-2 border border-gray-300">Total Income</td>
+          <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('income', month) }}</td>
+          <td></td>
+        </tr>
 
         <!-- Hiển thị danh mục chi phí -->
         <ng-container *ngFor="let category of categories.expense; let i = index">
@@ -69,11 +81,6 @@
       </tbody>
 
       <tfoot class="bg-gray-100 font-bold">
-        <tr>
-          <td class="p-2 border border-gray-300">Total Income</td>
-          <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('income', month) }}</td>
-          <td></td>
-        </tr>
         <tr>
           <td class="p-2 border border-gray-300">Total Expense</td>
           <td *ngFor="let month of months_gen" class="p-2 border border-gray-300 text-right">{{ calculateTotal('expense', month) }}</td>

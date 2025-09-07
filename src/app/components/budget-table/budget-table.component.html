@@ -113,11 +113,43 @@
               <input type="text" data-type="expense" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
             </td>
             <td>
-              <button class="btn" (click)="deleteCategory('expense', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">
-                <sh-icon [shIcon]="'trash'"></sh-icon>
-              </button>
+              <div class="d-flex gap-6">
+                <button class="btn" (click)="deleteCategory('expense', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">
+                  <sh-icon [shIcon]="'trash'"></sh-icon>
+                </button>
+                <button class="btn btn-add" (click)="addCategory('expense', category.id)">
+                  <sh-icon [shIcon]="'plus'"></sh-icon>
+                </button>
+                <button class="btn btn-expand" (click)="toggleExpand(category)" *ngIf="category.children?.length !== 0">
+                  <sh-icon [shIcon]="category.expanded ? 'arrow-right' : 'arrow-down'"></sh-icon>
+                </button>
+              </div>
             </td>
           </tr>
+
+          <!-- Hiển thị danh mục con nếu có -->
+          <ng-container *ngIf="category.children && category.expanded">
+            <tr *ngFor="let subCategory of category.children; let k = index" class="bg-red-100">
+              <td class="p-2 border border-gray-300 pl-20">
+                <div class="d-flex gap-8 justify-between">
+                  <blockquote #editableBlockSub [attr.contenteditable]="subCategory.changeName" [ngClass]="subCategory.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'expense', subCategory.id)" (input)="changeCategoryName($event, 'expense', subCategory.id)" [textContent]="subCategory.name"></blockquote>
+                  <button class="btn btn-edit" (click)="toggleChangeName(subCategory, editableBlockSub)">
+                    <sh-icon [shIcon]="subCategory.changeName ? 'save' : 'edit'"></sh-icon>
+                  </button>
+                </div>
+              </td>
+              <td *ngFor="let month of months_gen; let l = index" class="border border-gray-300">
+                <input type="text" data-type="expense" [(ngModel)]="subCategory.values[month]" (keydown)="handleKeydown($event, k, l)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, subCategory, month)" />
+              </td>
+              <td>
+                <div class="d-flex gap-6">
+                  <button class="btn btn-remove" (click)="deleteSubCategory(category, subCategory.id)">
+                    <sh-icon [shIcon]="'trash'"></sh-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
         </ng-container>
       </tbody>
 

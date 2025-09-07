@@ -3,11 +3,6 @@
     <div class="switch_period">
       <sh-select [shId]="'sh-range'" [shName]="'range'" [shPlaceHolder]="'All time'" [shData]="[{value: '0', label: 'All time'}, {value: '1', label: 'Start Period'}, {value: '2', label: 'End Period'}]" (shChange)="changeRange($event)" [shAllowClear]="false"></sh-select>
     </div>
-    <div class="d-flex gap-10">
-      <button class="btn btn-primary" (click)="addCategory('expense')">
-        <sh-icon [shIcon]="'plus'"></sh-icon> New Expense
-      </button>
-    </div>
   </div>
 
   <div class="tbl_container">
@@ -21,7 +16,7 @@
       </thead>
       <tbody>
         <!-- Hiển thị danh mục thu nhập -->
-        <tr>
+        <tr class="bg_lightgray">
           <td [attr.colspan]="months_gen.length + 2">
             <div class="d-flex justify-between">
               <span class="font500">Income</span>
@@ -58,6 +53,16 @@
         </tr>
 
         <!-- Hiển thị danh mục chi phí -->
+        <tr class="bg_lightgray">
+          <td [attr.colspan]="months_gen.length + 2" class="bg-red-100">
+            <div class="d-flex justify-between">
+              <span class="font500">Expense</span>
+              <button class="btn btn-primary" (click)="addCategory('expense')">
+                <sh-icon [shIcon]="'plus'"></sh-icon> New Expense
+              </button>
+            </div>
+          </td>
+        </tr>
         <ng-container *ngFor="let category of categories.expense; let i = index">
           <tr class="bg-red-50">
             <td class="p-2 border border-gray-300">

@@ -13,6 +13,10 @@ body {
   margin: 0;
 }
 
+.bg_lightgray {
+  background-color: #f1f1f1;
+}
+
 .d-flex {
   display: flex;
 }
@@ -116,10 +120,6 @@ blockquote:focus {
     border-left: 1px solid #dfdfdf;
     border-spacing: 0;
     width: 100%;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f7f7f7;
   }
 
   th,

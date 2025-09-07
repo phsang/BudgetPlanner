@@ -30,7 +30,10 @@
           <tr>
             <td class="p-2 border border-gray-300">
               <div class="d-flex gap-12 justify-between">
-                <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'income', category.id)" (input)="changeCategoryName($event, 'income', category.id)" [textContent]="category.name"></blockquote>
+                <div class="d-flex">
+                  <span>_</span>
+                  <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'income', category.id)" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
+                </div>
                 <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
                   <sh-icon [shIcon]="category.changeName ? 'save' : 'edit'"></sh-icon>
                 </button>
@@ -40,11 +43,44 @@
               <input type="text" data-type="income" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
             </td>
             <td>
-              <button class="btn" (click)="deleteCategory('income', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">
-                <sh-icon [shIcon]="'trash'"></sh-icon>
-              </button>
+              <div class="d-flex gap-6">
+                <button class="btn" (click)="deleteCategory('income', category.id)" [ngClass]="i == 0 ? 'btn-disabled' : 'btn-remove'">
+                  <sh-icon [shIcon]="'trash'"></sh-icon>
+                </button>
+                <button class="btn btn-add" (click)="addCategory('income', category.id)">
+                  <sh-icon [shIcon]="'plus'"></sh-icon>
+                </button>
+                <button class="btn btn-expand" (click)="toggleExpand(category)" *ngIf="category.children?.length !== 0">
+                  <sh-icon [shIcon]="category.expanded ? 'arrow-right' : 'arrow-down'"></sh-icon>
+                </button>
+              </div>
             </td>
           </tr>
+
+          <!-- Hiển thị danh mục con nếu có -->
+          <ng-container *ngIf="category.children && category.expanded">
+            <tr *ngFor="let subCategory of category.children; let k = index" class="bg-blue-50">
+              <td class="p-2 border border-gray-300 pl-20">
+                <div class="d-flex gap-12 justify-between">
+                  <div class="d-flex">
+                    <span>__</span>
+                    <blockquote #editableBlockSub [attr.contenteditable]="subCategory.changeName" [ngClass]="subCategory.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'income', subCategory.id)" (input)="changeCategoryName($event, 'income', subCategory.id)" [textContent]="subCategory.name"></blockquote>
+                  </div>
+                  <button class="btn btn-edit" (click)="toggleChangeName(subCategory, editableBlockSub)">
+                    <sh-icon [shIcon]="subCategory.changeName ? 'save' : 'edit'"></sh-icon>
+                  </button>
+                </div>
+              </td>
+              <td *ngFor="let month of months_gen; let l = index" class="border border-gray-300">
+                <input type="text" data-type="income" [(ngModel)]="subCategory.values[month]" (keydown)="handleKeydown($event, k, l)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, subCategory, month)" />
+              </td>
+              <td>
+                <button class="btn btn-remove" (click)="deleteSubCategory(category, subCategory.id)">
+                  <sh-icon [shIcon]="'trash'"></sh-icon>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
         </ng-container>
         <tr>
           <td class="p-2 border border-gray-300">Total Income</td>

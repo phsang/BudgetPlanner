@@ -126,11 +126,9 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
 
   // Thêm danh mục thu nhập hoặc chi phí mới
   addCategory(type: 'income' | 'expense', parentId?: string) {
-    const index = this.categories[type].length;
-
     const newCategory: BudgetCategory = {
       id: uuidv4(), // Tạo ID duy nhất bằng UUID
-      name: `New ${type} ${index + 1}`,
+      name: `New ${type}`,
       type,
       changeName: false,
       values: {
@@ -138,7 +136,7 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
         Jul: 0, Aug: 0, Sep: 0, Oct: 0, Nov: 0, Dec: 0
       },
       children: [],
-      expanded: false
+      expanded: true
     };
 
     if (parentId) {
@@ -154,6 +152,8 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
       // Nếu không có parentId, thêm vào danh mục cha
       this.categories[type].push(newCategory);
     }
+
+    console.log(this.categories);
 
     this.categories = { ...this.categories }; // Cập nhật UI
   }
@@ -189,6 +189,15 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     categories.forEach(category => {
       if (category.values[month]) {
         total += Number(category.values[month]) || 0;
+      }
+
+      // Tính tổng cho các danh mục con nếu có
+      if (category.children && category.children.length > 0) {
+        category.children.forEach(subCategory => {
+          if (subCategory.values[month]) {
+            total += Number(subCategory.values[month]) || 0;
+          }
+        });
       }
     });
 

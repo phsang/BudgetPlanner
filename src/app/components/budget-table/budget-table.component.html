@@ -64,7 +64,7 @@
                 <div class="d-flex gap-12 justify-between">
                   <div class="d-flex">
                     <span>__</span>
-                    <blockquote #editableBlockSub [attr.contenteditable]="subCategory.changeName" [ngClass]="subCategory.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'income', subCategory.id)" (input)="changeCategoryName($event, 'income', subCategory.id)" [textContent]="subCategory.name"></blockquote>
+                    <blockquote #editableBlockSub [attr.contenteditable]="subCategory.changeName" [ngClass]="subCategory.changeName ? 'changing_name' : ''" (keydown)="saveSubCategoryName($event, 'income', category.id, subCategory.id)" (input)="changeCategoryName($event, 'income', subCategory.id)" [textContent]="subCategory.name"></blockquote>
                   </div>
                   <button class="btn btn-edit" (click)="toggleChangeName(subCategory, editableBlockSub)">
                     <sh-icon [shIcon]="subCategory.changeName ? 'save' : 'edit'"></sh-icon>
@@ -132,7 +132,7 @@
             <tr *ngFor="let subCategory of category.children; let k = index" class="bg-red-100">
               <td class="p-2 border border-gray-300 pl-20">
                 <div class="d-flex gap-8 justify-between">
-                  <blockquote #editableBlockSub [attr.contenteditable]="subCategory.changeName" [ngClass]="subCategory.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'expense', subCategory.id)" (input)="changeCategoryName($event, 'expense', subCategory.id)" [textContent]="subCategory.name"></blockquote>
+                  <blockquote #editableBlockSub [attr.contenteditable]="subCategory.changeName" [ngClass]="subCategory.changeName ? 'changing_name' : ''" (keydown)="saveSubCategoryName($event, 'expense', category.id, subCategory.id)" (input)="changeCategoryName($event, 'expense', subCategory.id)" [textContent]="subCategory.name"></blockquote>
                   <button class="btn btn-edit" (click)="toggleChangeName(subCategory, editableBlockSub)">
                     <sh-icon [shIcon]="subCategory.changeName ? 'save' : 'edit'"></sh-icon>
                   </button>

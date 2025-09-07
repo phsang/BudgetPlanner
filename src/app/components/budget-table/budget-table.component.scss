@@ -25,3 +25,27 @@
 .switch_period {
   width: 200px;
 }
+
+.parent_node {
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid #ccc;
+  border-top: 4px solid transparent;
+  display: inline-block;
+  height: 0;
+  margin-right: 6px;
+  width: 0;
+}
+
+.parent_node.expanded {
+  border-bottom: none;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid #ccc;
+}
+
+.child_node {
+  display: inline-block;
+  height: 0;
+  margin-left: 12px;
+  width: 0;
+}

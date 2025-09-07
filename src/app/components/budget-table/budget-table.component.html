@@ -30,8 +30,8 @@
           <tr>
             <td class="p-2 border border-gray-300">
               <div class="d-flex gap-12 justify-between">
-                <div class="d-flex">
-                  <span>_</span>
+                <div class="d-flex align-items-center">
+                  <span class="parent_node" [ngClass]="category.expanded ? '' : 'expanded'"></span>
                   <blockquote #editableBlock [attr.contenteditable]="category.changeName" [ngClass]="category.changeName ? 'changing_name' : ''" (keydown)="saveCategoryName($event, 'income', category.id)" (input)="changeCategoryName($event, 'income', category.id)">{{ category.name }}</blockquote>
                 </div>
                 <button class="btn btn-edit" (click)="toggleChangeName(category, editableBlock)">
@@ -63,7 +63,7 @@
               <td class="p-2 border border-gray-300 pl-20">
                 <div class="d-flex gap-12 justify-between">
                   <div class="d-flex">
-                    <span>__</span>
+                    <span class="child_node"></span>
                     <blockquote #editableBlockSub [attr.contenteditable]="subCategory.changeName" [ngClass]="subCategory.changeName ? 'changing_name' : ''" (keydown)="saveSubCategoryName($event, 'income', category.id, subCategory.id)" (input)="changeCategoryName($event, 'income', subCategory.id)" [textContent]="subCategory.name"></blockquote>
                   </div>
                   <button class="btn btn-edit" (click)="toggleChangeName(subCategory, editableBlockSub)">

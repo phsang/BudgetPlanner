@@ -21,6 +21,10 @@ body {
   display: flex;
 }
 
+.align-items-center {
+  align-items: center !important;
+}
+
 .align-items-end {
   align-items: flex-end !important;
 }

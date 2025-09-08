@@ -39,8 +39,9 @@
                 </button>
               </div>
             </td>
-            <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-              <input type="text" data-type="income" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, 'income', category, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+            <td *ngFor="let month of months_gen; let j = index" class="text-right">
+              <span>{{ calculateTotalOnChild('income', category, month) }}</span>
+              <!-- <input type="text" data-type="income" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, 'income', category, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" /> -->
             </td>
             <td>
               <div class="d-flex gap-6">
@@ -112,8 +113,9 @@
                 </button>
               </div>
             </td>
-            <td *ngFor="let month of months_gen; let j = index" class="border border-gray-300">
-              <input type="text" data-type="expense" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, 'expense', category, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" />
+            <td *ngFor="let month of months_gen; let j = index" class="text-right">
+              <span>{{ calculateTotalOnChild('expense', category, month) }}</span>
+              <!-- <input type="text" data-type="expense" [(ngModel)]="category.values[month]" (keydown)="handleKeydown($event, 'expense', category, i, j)" (input)="formatNumberInput($event)" (contextmenu)="onRightClick($event, category, month)" [autofocus]="i === 0 && j === 0" /> -->
             </td>
             <td>
               <div class="d-flex gap-6">

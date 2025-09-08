@@ -363,4 +363,19 @@ export class BudgetTableComponent implements OnInit, AfterViewInit {
     return openingBalance + income - expense;
   }
 
+  calculateTotalOnChild(type: 'income' | 'expense', category: BudgetCategory, month: string): number {
+    let total = 0;
+    if (category.children && category.children.length > 0) {
+      category.children.forEach(subCategory => {
+        if (subCategory.values[month]) {
+          total += Number(subCategory.values[month]) || 0;
+        }
+        if (subCategory.children && subCategory.children.length > 0) {
+          total += this.calculateTotalOnChild(type, subCategory, month);
+        }
+      });
+    }
+    return total;
+  }
+
 }
